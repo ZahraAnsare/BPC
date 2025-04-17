@@ -12,6 +12,7 @@ public class Physiotherapist {
     public String PhoneNumber;
     public List<String> ExpertiseAreas;
     public Map<String, String> WorkingTimetable;
+    public TreatmentSchedule treatmentSchedule;
 
     public Physiotherapist(String FullName, String Address, String PhoneNumber,
                            List<String> ExpertiseAreas, Map<String, String> WorkingTimetable) {
@@ -21,7 +22,10 @@ public class Physiotherapist {
         this.PhoneNumber = PhoneNumber;
         this.ExpertiseAreas = ExpertiseAreas;
         this.WorkingTimetable = WorkingTimetable;
+        this.treatmentSchedule = new TreatmentSchedule(); // Initialize TreatmentSchedule
     }
+
+
 
     @Override
     public String toString() {
@@ -32,6 +36,7 @@ public class Physiotherapist {
                 ", PhoneNumber='" + PhoneNumber + '\'' +
                 ", ExpertiseAreas=" + ExpertiseAreas +
                 ", WorkingTimetable=" + WorkingTimetable +
+                ", treatmentSchedule=" + treatmentSchedule +
                 '}';
     }
 }

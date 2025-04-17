@@ -1,5 +1,6 @@
 package org.example;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Main {
@@ -71,16 +72,43 @@ public class Main {
                     break;
 
                 case 3:
+                    System.out.print("Enter treatment name: ");
+                    String treatmentName = scanner.nextLine();
+
+                    System.out.print("Enter date and time (yyyy-MM-dd HH:mm): ");
+                    String dateInput = scanner.nextLine();
+                    LocalDateTime dateTime = LocalDateTime.parse(dateInput.replace(" ", "T"));
+
+                    System.out.print("Enter physiotherapist name: ");
+                    String physioSearch = scanner.nextLine();
+                    Physiotherapist foundPhysio = null;
+
+                    for (Physiotherapist p : physioList) {
+                        if (p.FullName.equalsIgnoreCase(physioSearch)) {
+                            foundPhysio = p;
+                            break;
+                        }
+                    }
+
+                    if (foundPhysio == null) {
+                        System.out.println("Physiotherapist not found.");
+                    } else {
+                        Treatment treatment = new Treatment(treatmentName, dateTime, foundPhysio);
+                        treatmentList.add(treatment);
+                        foundPhysio.treatmentSchedule.addTreatment(treatment);  // Correct method
+                        System.out.println("Treatment added: " + treatment);
+                    }
+                    break;
+
+                case 4:
                     System.out.println("Exiting...");
                     scanner.close();
                     System.out.println("\nAll patients:");
-                    for (Patient p : patientList) {
-                        System.out.println(p);
-                    }
+                    for (Patient p : patientList) System.out.println(p);
                     System.out.println("\nAll physiotherapists:");
-                    for (Physiotherapist pt : physioList) {
-                        System.out.println(pt);
-                    }
+                    for (Physiotherapist pt : physioList) System.out.println(pt);
+                    System.out.println("\nAll treatments:");
+                    for (Treatment t : treatmentList) System.out.println(t);
                     return;
 
                 default:
