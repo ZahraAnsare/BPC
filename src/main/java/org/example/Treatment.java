@@ -16,6 +16,14 @@ public class Treatment {
         this.status = "available";
     }
 
+    public Physiotherapist getPhysiotherapist() {
+        return physiotherapist;
+    }
+
+    public void setPhysiotherapist(Physiotherapist physiotherapist) {
+        this.physiotherapist = physiotherapist;
+    }
+
     public void bookTreatment(Patient patient) {
         this.patient = patient;
         this.status = "booked";
@@ -42,4 +50,5 @@ public class Treatment {
                 ", status='" + status + '\'' +
                 '}';
     }
+
 }

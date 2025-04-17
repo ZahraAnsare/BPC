@@ -15,7 +15,8 @@ public class Main {
             System.out.println("1. Add Patient");
             System.out.println("2. Add Physiotherapist");
             System.out.println("3. Add Treatment");
-            System.out.println("4. Exit");
+            System.out.println("4. Appointment");
+            System.out.println("5. Exit");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -99,8 +100,17 @@ public class Main {
                         System.out.println("Treatment added: " + treatment);
                     }
                     break;
+                case 4: // Book appointment
+                    System.out.print("Enter physiotherapist name: ");
+                    physioName = scanner.nextLine();
 
-                case 4:
+                    System.out.print("Enter your patient ID: ");
+                    int patientId = scanner.nextInt();
+                    scanner.nextLine();
+
+                    Appointment booked = Appointment.bookAppointment(physioName, physioList, treatmentList, patientList, patientId);
+                    break;
+                case 5:
                     System.out.println("Exiting...");
                     scanner.close();
                     System.out.println("\nAll patients:");

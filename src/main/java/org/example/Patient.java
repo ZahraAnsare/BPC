@@ -8,6 +8,14 @@ public class Patient {
     public String Address;
     public String PhoneNumber;
 
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
     public Patient(int ID, String FullName, String Address, String PhoneNumber) {
         this.ID = ID;
         this.FullName = FullName;
