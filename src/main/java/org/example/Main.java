@@ -2,6 +2,7 @@ package org.example;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.Collection.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -9,6 +10,9 @@ public class Main {
         ArrayList<Patient> patientList = new ArrayList<>();
         ArrayList<Physiotherapist> physioList = new ArrayList<>();
         ArrayList<Treatment> treatmentList = new ArrayList<>();
+        patientList.addAll(generateSamplePatients());
+        physioList.addAll(generateSamplePhysiotherapists());
+        generateSampleAppointments(treatmentList, patientList, physioList);
 
         while (true) {
             System.out.println("\nSelect an option:");
@@ -126,4 +130,44 @@ public class Main {
             }
         }
     }
+    private static List<Patient> generateSamplePatients() {
+        return Arrays.asList(
+                new Patient(1, "Jack Black", "67 Saxon Drive, W3 0DR", "07789967762"),
+                new Patient(2, "James Smith", "45 Oak St, W10 4RE", "07655233210"),
+                new Patient(3, "Charles Lewis", "79 Edgware Rd, W9 2DR", "07672242110"),
+                new Patient(4, "Debora Williams", "31 Notting hill Rd, W4 6TE", "07572884009"),
+                new Patient(5, "Evie Walker", "65 Birch St, W3 0RE", "07466524909"),
+                new Patient(6, "Faith Brown", "98 Elm St, W9 6DQ", "07464069588"),
+                new Patient(7, "Timothy Clarke", "11 Ash St, W2 4DQ", "07890122080"),
+                new Patient(8, "Amy Williams", "2 Spruce St, W1 2DE", "07889660800"),
+                new Patient(9, "Keira Knight", "33 Redwood St, W12 4DE", "07996262001"),
+                new Patient(10, "Julie Andrews", "44 Willow St, W12 4RE", "07832260001")
+        );
+    }
+
+    private static List<Physiotherapist> generateSamplePhysiotherapists() {
+        List<Physiotherapist> physios = new ArrayList<>();
+
+        Map<String, String> timetable = new HashMap<>();
+        timetable.put("Monday", "09:00 - 17:00");
+        timetable.put("Wednesday", "09:00 - 17:00");
+        timetable.put("Friday", "09:00 - 17:00");
+
+        physios.add(new Physiotherapist("Dr. Rachel Green", "121 Rosewood Lane, W6 4DD", "07866262010", Arrays.asList("Massage", "Acupuncture"), new HashMap<>(timetable)));
+        physios.add(new Physiotherapist("Dr. Ava Parker", "22 Richwood Avenue, W3 4DR", "07976224010", Arrays.asList("Sports Injury", "Rehab"), new HashMap<>(timetable)));
+        physios.add(new Physiotherapist("Dr. Emma Lewis", "77 Quentin Drive, N2 6GB", "07727210010", Arrays.asList("Joint Therapy", "Manual Therapy"), new HashMap<>(timetable)));
+        physios.add(new Physiotherapist("Dr. Noah Harris", "46  Horsehill St", "07455667788", Arrays.asList("Musculoskeletal", "Orthopedics"), new HashMap<>(timetable)));
+        physios.add(new Physiotherapist("Dr. Olivia Moore", "57 Kingswood Rd", "07567678899", Arrays.asList("Post-Surgical", "Cardio Rehab"), new HashMap<>(timetable)));
+
+        return physios;
+    }
+
+    private static void generateSampleAppointments(List<Treatment> treatmentList, List<Patient> patients, List<Physiotherapist> physios) {
+        treatmentList.add(new Treatment("Acupuncture", LocalDateTime.of(2025, 4, 20, 10, 0), physios.get(0)));
+        treatmentList.add(new Treatment("Sports Injury", LocalDateTime.of(2025, 4, 21, 11, 0), physios.get(1)));
+        treatmentList.add(new Treatment("Joint Therapy", LocalDateTime.of(2025, 4, 22, 9, 30), physios.get(2)));
+        treatmentList.add(new Treatment("Orthopedics", LocalDateTime.of(2025, 4, 23, 14, 0), physios.get(3)));
+        treatmentList.add(new Treatment("Post-Surgical", LocalDateTime.of(2025, 4, 24, 13, 0), physios.get(4)));
+    }
+
 }

@@ -3,52 +3,44 @@ package org.example;
 import java.time.LocalDateTime;
 
 public class Treatment {
-    public String name;
-    public LocalDateTime dateTime;
-    public Physiotherapist physiotherapist;
-    public Patient patient; // null if not yet booked
-    public String status; // booked, cancelled, attended
+    private String treatmentName;
+    private LocalDateTime dateTime;
+    private Physiotherapist physiotherapist;
+    private Patient patient; // Optional: assigned when booked
 
-    public Treatment(String name, LocalDateTime dateTime, Physiotherapist physiotherapist) {
-        this.name = name;
+    public Treatment(String treatmentName, LocalDateTime dateTime, Physiotherapist physiotherapist) {
+        this.treatmentName = treatmentName;
         this.dateTime = dateTime;
         this.physiotherapist = physiotherapist;
-        this.status = "available";
+    }
+
+    public void assignPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public String getTreatmentName() {
+        return treatmentName;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
     public Physiotherapist getPhysiotherapist() {
         return physiotherapist;
     }
 
-    public void setPhysiotherapist(Physiotherapist physiotherapist) {
-        this.physiotherapist = physiotherapist;
-    }
-
-    public void bookTreatment(Patient patient) {
-        this.patient = patient;
-        this.status = "booked";
-    }
-
-    public void cancelTreatment() {
-        this.patient = null;
-        this.status = "cancelled";
-    }
-
-    public void attendTreatment() {
-        if (status.equals("booked")) {
-            this.status = "attended";
-        }
-    }
-
     @Override
     public String toString() {
         return "Treatment{" +
-                "name='" + name + '\'' +
+                "treatmentName='" + treatmentName + '\'' +
                 ", dateTime=" + dateTime +
                 ", physiotherapist=" + physiotherapist.FullName +
-                ", patient=" + (patient != null ? patient.FullName : "None") +
-                ", status='" + status + '\'' +
+                (patient != null ? ", patient=" + patient.getName() : "") +
                 '}';
     }
-
 }

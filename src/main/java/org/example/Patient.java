@@ -3,35 +3,41 @@ import java.util.List;
 import java.util.Map;
 
 public class Patient {
-    public int ID;
-    public String FullName;
-    public String Address;
-    public String PhoneNumber;
+    private int id;
+    private String name;
+    private String address;
+    private String phone;
+
+    public Patient(int id, String name, String address, String phone) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+    }
 
     public int getID() {
-        return ID;
+        return id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public String getName() {
+        return name;
     }
 
-    public Patient(int ID, String FullName, String Address, String PhoneNumber) {
-        this.ID = ID;
-        this.FullName = FullName;
-        this.Address = Address;
-        this.PhoneNumber = PhoneNumber;
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 
     @Override
     public String toString() {
         return "Patient{" +
-                "ID=" + ID +
-                ", FullName='" + FullName + '\'' +
-                ", Address='" + Address + '\'' +
-                ", PhoneNumber='" + PhoneNumber + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
                 '}';
     }
 }
-
-
