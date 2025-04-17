@@ -163,11 +163,31 @@ public class Main {
     }
 
     private static void generateSampleAppointments(List<Treatment> treatmentList, List<Patient> patients, List<Physiotherapist> physios) {
-        treatmentList.add(new Treatment("Acupuncture", LocalDateTime.of(2025, 4, 20, 10, 0), physios.get(0)));
-        treatmentList.add(new Treatment("Sports Injury", LocalDateTime.of(2025, 4, 21, 11, 0), physios.get(1)));
-        treatmentList.add(new Treatment("Joint Therapy", LocalDateTime.of(2025, 4, 22, 9, 30), physios.get(2)));
-        treatmentList.add(new Treatment("Orthopedics", LocalDateTime.of(2025, 4, 23, 14, 0), physios.get(3)));
-        treatmentList.add(new Treatment("Post-Surgical", LocalDateTime.of(2025, 4, 24, 13, 0), physios.get(4)));
+
+            treatmentList.add(new Treatment("Acupuncture", LocalDateTime.of(2025, 4, 21, 10, 0), physios.get(0))); // Monday
+            treatmentList.add(new Treatment("Sports Injury", LocalDateTime.of(2025, 4, 23, 11, 0), physios.get(1))); // Wednesday
+
+            treatmentList.add(new Treatment("Joint Therapy", LocalDateTime.of(2025, 4, 28, 9, 30), physios.get(2))); // Monday
+            treatmentList.add(new Treatment("Orthopedics", LocalDateTime.of(2025, 4, 30, 14, 0), physios.get(3))); // Wednesday
+
+            treatmentList.add(new Treatment("Post-Surgical", LocalDateTime.of(2025, 5, 5, 13, 0), physios.get(4))); // Monday
+            treatmentList.add(new Treatment("Cardio Rehab", LocalDateTime.of(2025, 5, 7, 15, 0), physios.get(4))); // Wednesday
+
+            treatmentList.add(new Treatment("Manual Therapy", LocalDateTime.of(2025, 5, 12, 10, 30), physios.get(2))); // Monday
+            treatmentList.add(new Treatment("Massage", LocalDateTime.of(2025, 5, 14, 11, 15), physios.get(0))); // Wednesday
+
+            treatmentList.add(new Treatment("Acupuncture", LocalDateTime.of(2025, 4, 25, 10, 30), physios.get(0))); // Friday
+            treatmentList.add(new Treatment("Rehab", LocalDateTime.of(2025, 4, 25, 15, 30), physios.get(1))); // Friday
+
+            treatmentList.add(new Treatment("Joint Therapy", LocalDateTime.of(2025, 5, 2, 9, 0), physios.get(2))); // Friday
+            treatmentList.add(new Treatment("Orthopedics", LocalDateTime.of(2025, 5, 2, 14, 30), physios.get(3))); // Friday
+
+            treatmentList.add(new Treatment("Post-Surgical", LocalDateTime.of(2025, 5, 9, 13, 15), physios.get(4))); // Friday
+            treatmentList.add(new Treatment("Massage", LocalDateTime.of(2025, 5, 9, 10, 15), physios.get(0))); // Friday
+
+            treatmentList.add(new Treatment("Sports Injury", LocalDateTime.of(2025, 5, 16, 11, 45), physios.get(1))); // Friday
+            treatmentList.add(new Treatment("Manual Therapy", LocalDateTime.of(2025, 5, 16, 9, 15), physios.get(2))); // Friday
+        }
     }
 
-}
+
