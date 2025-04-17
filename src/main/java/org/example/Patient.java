@@ -1,4 +1,6 @@
 package org.example;
+import java.util.List;
+import java.util.Map;
 
 public class Patient {
     public int ID;
@@ -23,4 +25,5 @@ public class Patient {
                 '}';
     }
 }
+
 
