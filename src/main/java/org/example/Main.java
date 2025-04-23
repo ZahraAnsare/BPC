@@ -19,7 +19,8 @@ public class Main {
             System.out.println("1. Add Patient");
             System.out.println("2. Add Physiotherapist");
             System.out.println("3. Add Treatment");
-            System.out.println("4. Appointment");
+            System.out.println("4. Book an Appointment");
+            System.out.println("4. Cancel an Appointment");
             System.out.println("5. Exit");
 
             int choice = scanner.nextInt();
