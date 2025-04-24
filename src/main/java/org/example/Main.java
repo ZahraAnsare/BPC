@@ -20,7 +20,8 @@ public class Main {
             System.out.println("3. Add Treatment");
             System.out.println("4. Book an Appointment");
             System.out.println("5. Cancel an Appointment");
-            System.out.println("6. Exit");
+            System.out.println("6. List all Physiotherapists");
+            System.out.println("7. Exit");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -121,6 +122,17 @@ public class Main {
                     break;
 
                 case 6:
+                    System.out.println("\n--- Available Physiotherapists ---");
+                    for (Physiotherapist pt : physioList) {
+                        System.out.println("Name: " + pt.getFullName());
+                        System.out.println("Address: " + pt.getAddress());
+                        System.out.println("Phone: " + pt.getPhoneNumber());
+                        System.out.println("Expertise: " + pt.getExpertiseAreas());
+                        System.out.println("Timetable: " + pt.getWorkingTimetable());
+                        System.out.println("----------------------------------------");
+                    }
+                    break;
+                case 7:
                     System.out.println("Exiting...");
                     scanner.close();
                     System.out.println("\nAll patients:");
