@@ -8,6 +8,9 @@ public class Appointment {
     private Patient patient;
     private Treatment treatment;
 
+    // Static list to store all appointments
+    private static final List<Appointment> allAppointments = new ArrayList<>();
+
     public Appointment(Patient patient, Treatment treatment) {
         this.patient = patient;
         this.treatment = treatment;
@@ -19,6 +22,10 @@ public class Appointment {
 
     public Treatment getTreatment() {
         return treatment;
+    }
+
+    public static List<Appointment> getAllAppointments() {
+        return allAppointments;
     }
 
     @Override
@@ -37,11 +44,11 @@ public class Appointment {
             List<Patient> patientList,
             int patientId
     ) {
+        Scanner scanner = new Scanner(System.in);
         Physiotherapist physio = null;
 
-        // Step 1: Find the physiotherapist
         for (Physiotherapist p : physioList) {
-            if (p.FullName.equalsIgnoreCase(physioName)) {
+            if (p.getFullName().equalsIgnoreCase(physioName)) {
                 physio = p;
                 break;
             }
@@ -52,7 +59,6 @@ public class Appointment {
             return null;
         }
 
-        // Step 2: Show available treatments for this physiotherapist
         List<Treatment> availableTreatments = new ArrayList<>();
         for (Treatment t : treatmentList) {
             if (t.getPhysiotherapist().equals(physio)) {
@@ -70,9 +76,7 @@ public class Appointment {
             System.out.println((i + 1) + ". " + availableTreatments.get(i));
         }
 
-        // Step 3: Let user choose one
         System.out.print("Select a treatment by number: ");
-        Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
         scanner.nextLine();
 
@@ -83,7 +87,6 @@ public class Appointment {
 
         Treatment selectedTreatment = availableTreatments.get(choice - 1);
 
-        // Step 4: Find the patient
         Patient selectedPatient = null;
         for (Patient p : patientList) {
             if (p.getID() == patientId) {
@@ -97,9 +100,35 @@ public class Appointment {
             return null;
         }
 
-        // Step 5: Create and return appointment
         Appointment appointment = new Appointment(selectedPatient, selectedTreatment);
+        allAppointments.add(appointment);
+
         System.out.println("Appointment booked: " + appointment);
         return appointment;
+    }
+
+    // Static method to cancel appointment
+    public static void cancelAppointment(Scanner scanner) {
+        if (allAppointments.isEmpty()) {
+            System.out.println("No appointments to cancel.");
+            return;
+        }
+
+        System.out.println("\nAll Appointments:");
+        for (int i = 0; i < allAppointments.size(); i++) {
+            System.out.println((i + 1) + ". " + allAppointments.get(i));
+        }
+
+        System.out.print("Enter the number of the appointment to cancel: ");
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        if (choice < 1 || choice > allAppointments.size()) {
+            System.out.println("Invalid selection.");
+            return;
+        }
+
+        Appointment cancelled = allAppointments.remove(choice - 1);
+        System.out.println("Cancelled appointment: " + cancelled);
     }
 }

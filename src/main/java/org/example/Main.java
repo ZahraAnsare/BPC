@@ -2,7 +2,6 @@ package org.example;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.Collection.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,8 +19,8 @@ public class Main {
             System.out.println("2. Add Physiotherapist");
             System.out.println("3. Add Treatment");
             System.out.println("4. Book an Appointment");
-            System.out.println("4. Cancel an Appointment");
-            System.out.println("5. Exit");
+            System.out.println("5. Cancel an Appointment");
+            System.out.println("6. Exit");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -90,7 +89,7 @@ public class Main {
                     Physiotherapist foundPhysio = null;
 
                     for (Physiotherapist p : physioList) {
-                        if (p.FullName.equalsIgnoreCase(physioSearch)) {
+                        if (p.getFullName().equalsIgnoreCase(physioSearch)) {
                             foundPhysio = p;
                             break;
                         }
@@ -101,11 +100,12 @@ public class Main {
                     } else {
                         Treatment treatment = new Treatment(treatmentName, dateTime, foundPhysio);
                         treatmentList.add(treatment);
-                        foundPhysio.treatmentSchedule.addTreatment(treatment);  // Correct method
+                        foundPhysio.treatmentSchedule.addTreatment(treatment);
                         System.out.println("Treatment added: " + treatment);
                     }
                     break;
-                case 4: // Book appointment
+
+                case 4:
                     System.out.print("Enter physiotherapist name: ");
                     physioName = scanner.nextLine();
 
@@ -115,7 +115,12 @@ public class Main {
 
                     Appointment booked = Appointment.bookAppointment(physioName, physioList, treatmentList, patientList, patientId);
                     break;
+
                 case 5:
+                    Appointment.cancelAppointment(scanner);
+                    break;
+
+                case 6:
                     System.out.println("Exiting...");
                     scanner.close();
                     System.out.println("\nAll patients:");
@@ -124,6 +129,8 @@ public class Main {
                     for (Physiotherapist pt : physioList) System.out.println(pt);
                     System.out.println("\nAll treatments:");
                     for (Treatment t : treatmentList) System.out.println(t);
+                    System.out.println("\nAll appointments:");
+                    for (Appointment a : Appointment.getAllAppointments()) System.out.println(a);
                     return;
 
                 default:
@@ -163,7 +170,7 @@ public class Main {
         return physios;
     }
 
-    private static void generateSampleAppointments(List<Treatment> treatmentList, List<Patient> patients, List<Physiotherapist> physios) {
+    private static void generateSampleAppointments(ArrayList<Treatment> treatmentList, ArrayList<Patient> patients, ArrayList<Physiotherapist> physios) {
 
             treatmentList.add(new Treatment("Acupuncture", LocalDateTime.of(2025, 4, 21, 10, 0), physios.get(0))); // Monday
             treatmentList.add(new Treatment("Sports Injury", LocalDateTime.of(2025, 4, 23, 11, 0), physios.get(1))); // Wednesday

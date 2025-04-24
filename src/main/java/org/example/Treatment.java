@@ -6,7 +6,7 @@ public class Treatment {
     private String treatmentName;
     private LocalDateTime dateTime;
     private Physiotherapist physiotherapist;
-    private Patient patient; // Optional: assigned when booked
+    private Patient patient; // Assigned when booked
 
     public Treatment(String treatmentName, LocalDateTime dateTime, Physiotherapist physiotherapist) {
         this.treatmentName = treatmentName;
@@ -14,14 +14,7 @@ public class Treatment {
         this.physiotherapist = physiotherapist;
     }
 
-    public void assignPatient(Patient patient) {
-        this.patient = patient;
-    }
-
-    public Patient getPatient() {
-        return patient;
-    }
-
+    // --- Getters ---
     public String getTreatmentName() {
         return treatmentName;
     }
@@ -34,13 +27,25 @@ public class Treatment {
         return physiotherapist;
     }
 
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void assignPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public boolean isBooked() {
+        return patient != null;
+    }
+
     @Override
     public String toString() {
         return "Treatment{" +
                 "treatmentName='" + treatmentName + '\'' +
                 ", dateTime=" + dateTime +
-                ", physiotherapist=" + physiotherapist.FullName +
-                (patient != null ? ", patient=" + patient.getName() : "") +
+                ", physiotherapist=" + physiotherapist.getFullName() +
+                (isBooked() ? ", patient=" + patient.getName() : "") +
                 '}';
     }
 }
