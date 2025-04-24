@@ -38,4 +38,8 @@ public class Patient {
                 ", phone='" + phone + '\'' +
                 '}';
     }
+
+    public int getId() {
+        return id;
+    }
 }

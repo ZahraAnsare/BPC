@@ -9,147 +9,208 @@ public class Main {
         ArrayList<Patient> patientList = new ArrayList<>();
         ArrayList<Physiotherapist> physioList = new ArrayList<>();
         ArrayList<Treatment> treatmentList = new ArrayList<>();
+
         patientList.addAll(generateSamplePatients());
         physioList.addAll(generateSamplePhysiotherapists());
         generateSampleAppointments(treatmentList, patientList, physioList);
 
         while (true) {
             System.out.println("\nSelect an option:");
-            System.out.println("1. Add Patient");
-            System.out.println("2. Add Physiotherapist");
-            System.out.println("3. Add Treatment");
-            System.out.println("4. Book an Appointment");
-            System.out.println("5. Cancel an Appointment");
-            System.out.println("6. List all Physiotherapists");
-            System.out.println("7. Exit");
+            System.out.println("1. Book an Appointment");
+            System.out.println("2. List all Physiotherapists");
+            System.out.println("3. Add Patient");
+            System.out.println("4. Remove Patient");
+            System.out.println("5. Add Physiotherapist");
+            System.out.println("6. Add Treatment");
+            System.out.println("7. Cancel an Appointment");
+            System.out.println("8. Exit");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
 
             switch (choice) {
                 case 1:
-                    System.out.print("Enter the ID of the patient: ");
-                    int id = scanner.nextInt();
-                    scanner.nextLine();
-
-                    System.out.print("Enter the name of the patient: ");
-                    String name = scanner.nextLine();
-
-                    System.out.print("Enter the address of the patient: ");
-                    String address = scanner.nextLine();
-
-                    System.out.print("Enter the phone number of the patient: ");
-                    String phone = scanner.nextLine();
-
-                    Patient patient = new Patient(id, name, address, phone);
-                    patientList.add(patient);
-                    System.out.println("Patient added: " + patient);
+                    bookAppointment(scanner, patientList, physioList, treatmentList);
                     break;
-
                 case 2:
-                    System.out.print("Enter the name of the physiotherapist: ");
-                    String physioName = scanner.nextLine();
-
-                    System.out.print("Enter the address: ");
-                    String physioAddress = scanner.nextLine();
-
-                    System.out.print("Enter the phone number: ");
-                    String physioPhone = scanner.nextLine();
-
-                    System.out.println("Enter areas of expertise (comma-separated): ");
-                    String expertiseInput = scanner.nextLine();
-                    List<String> expertiseAreas = Arrays.asList(expertiseInput.split("\\s*,\\s*"));
-
-                    Map<String, String> timetable = new HashMap<>();
-                    System.out.println("Enter working timetable (type 'done' to finish):");
-                    while (true) {
-                        System.out.print("Day: ");
-                        String day = scanner.nextLine();
-                        if (day.equalsIgnoreCase("done")) break;
-
-                        System.out.print("Working hours (e.g., 09:00 - 17:00): ");
-                        String hours = scanner.nextLine();
-                        timetable.put(day, hours);
-                    }
-
-                    Physiotherapist physio = new Physiotherapist(physioName, physioAddress, physioPhone, expertiseAreas, timetable);
-                    physioList.add(physio);
-                    System.out.println("Physiotherapist added: " + physio);
+                    listPhysiotherapists(physioList);
                     break;
-
                 case 3:
-                    System.out.print("Enter treatment name: ");
-                    String treatmentName = scanner.nextLine();
-
-                    System.out.print("Enter date and time (yyyy-MM-dd HH:mm): ");
-                    String dateInput = scanner.nextLine();
-                    LocalDateTime dateTime = LocalDateTime.parse(dateInput.replace(" ", "T"));
-
-                    System.out.print("Enter physiotherapist name: ");
-                    String physioSearch = scanner.nextLine();
-                    Physiotherapist foundPhysio = null;
-
-                    for (Physiotherapist p : physioList) {
-                        if (p.getFullName().equalsIgnoreCase(physioSearch)) {
-                            foundPhysio = p;
-                            break;
-                        }
-                    }
-
-                    if (foundPhysio == null) {
-                        System.out.println("Physiotherapist not found.");
-                    } else {
-                        Treatment treatment = new Treatment(treatmentName, dateTime, foundPhysio);
-                        treatmentList.add(treatment);
-                        foundPhysio.treatmentSchedule.addTreatment(treatment);
-                        System.out.println("Treatment added: " + treatment);
-                    }
+                    addPatient(scanner, patientList);
                     break;
-
                 case 4:
-                    System.out.print("Enter physiotherapist name: ");
-                    physioName = scanner.nextLine();
-
-                    System.out.print("Enter your patient ID: ");
-                    int patientId = scanner.nextInt();
-                    scanner.nextLine();
-
-                    Appointment booked = Appointment.bookAppointment(physioName, physioList, treatmentList, patientList, patientId);
+                    removePatient(scanner, patientList);
                     break;
-
                 case 5:
-                    Appointment.cancelAppointment(scanner);
+                    addPhysiotherapist(scanner, physioList);
                     break;
-
                 case 6:
-                    System.out.println("\n--- Available Physiotherapists ---");
-                    for (Physiotherapist pt : physioList) {
-                        System.out.println("Name: " + pt.getFullName());
-                        System.out.println("Address: " + pt.getAddress());
-                        System.out.println("Phone: " + pt.getPhoneNumber());
-                        System.out.println("Expertise: " + pt.getExpertiseAreas());
-                        System.out.println("Timetable: " + pt.getWorkingTimetable());
-                        System.out.println("----------------------------------------");
-                    }
+                    addTreatment(scanner, treatmentList, patientList, physioList);
                     break;
                 case 7:
+                    cancelAppointment(scanner, treatmentList);
+                    break;
+                case 8:
                     System.out.println("Exiting...");
                     scanner.close();
-                    System.out.println("\nAll patients:");
-                    for (Patient p : patientList) System.out.println(p);
-                    System.out.println("\nAll physiotherapists:");
-                    for (Physiotherapist pt : physioList) System.out.println(pt);
-                    System.out.println("\nAll treatments:");
-                    for (Treatment t : treatmentList) System.out.println(t);
-                    System.out.println("\nAll appointments:");
-                    for (Appointment a : Appointment.getAllAppointments()) System.out.println(a);
                     return;
-
                 default:
                     System.out.println("Invalid option. Please try again.");
             }
         }
     }
+
+
+    private static void bookAppointment(Scanner scanner, ArrayList<Patient> patientList, ArrayList<Physiotherapist> physioList, ArrayList<Treatment> treatmentList) {
+        System.out.print("Enter the ID of the patient: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Enter the name of the patient: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter the address of the patient: ");
+        String address = scanner.nextLine();
+
+        System.out.print("Enter the phone number of the patient: ");
+        String phone = scanner.nextLine();
+
+        Patient patient = new Patient(id, name, address, phone);
+        patientList.add(patient);
+        System.out.println("Patient added: " + patient);
+    }
+
+
+    private static void listPhysiotherapists(ArrayList<Physiotherapist> physioList) {
+        System.out.println("\n--- Available Physiotherapists ---");
+        for (Physiotherapist pt : physioList) {
+            System.out.println("Name: " + pt.getFullName());
+            System.out.println("Address: " + pt.getAddress());
+            System.out.println("Phone: " + pt.getPhoneNumber());
+            System.out.println("Expertise: " + pt.getExpertiseAreas());
+            System.out.println("Timetable: " + pt.getWorkingTimetable());
+            System.out.println("----------------------------------------");
+        }
+    }
+
+
+    private static void addPatient(Scanner scanner, ArrayList<Patient> patientList) {
+        System.out.print("Enter the ID of the patient: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Enter the name of the patient: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter the address of the patient: ");
+        String address = scanner.nextLine();
+
+        System.out.print("Enter the phone number of the patient: ");
+        String phone = scanner.nextLine();
+
+        Patient patient = new Patient(id, name, address, phone);
+        patientList.add(patient);
+        System.out.println("Patient added: " + patient);
+    }
+
+
+    private static void removePatient(Scanner scanner, ArrayList<Patient> patientList) {
+        System.out.print("Enter the ID of the patient to remove: ");
+        int patientId = scanner.nextInt();
+        scanner.nextLine();
+        removePatientById(patientList, patientId);
+    }
+
+
+    private static void removePatientById(List<Patient> patientList, int patientId) {
+        boolean removed = patientList.removeIf(patient -> patient.getId() == patientId);
+        if (removed) {
+            System.out.println("Patient with ID " + patientId + " has been removed.");
+        } else {
+            System.out.println("Patient with ID " + patientId + " not found.");
+        }
+    }
+
+    private static void addPhysiotherapist(Scanner scanner, ArrayList<Physiotherapist> physioList) {
+        System.out.print("Enter the name of the physiotherapist: ");
+        String physioName = scanner.nextLine();
+
+        System.out.print("Enter the address: ");
+        String physioAddress = scanner.nextLine();
+
+        System.out.print("Enter the phone number: ");
+        String physioPhone = scanner.nextLine();
+
+        System.out.println("Enter areas of expertise (comma-separated): ");
+        String expertiseInput = scanner.nextLine();
+        List<String> expertiseAreas = Arrays.asList(expertiseInput.split("\\s*,\\s*"));
+
+        Map<String, String> timetable = new HashMap<>();
+        System.out.println("Enter working timetable (type 'done' to finish):");
+        while (true) {
+            System.out.print("Day: ");
+            String day = scanner.nextLine();
+            if (day.equalsIgnoreCase("done")) break;
+
+            System.out.print("Working hours (e.g., 09:00 - 17:00): ");
+            String hours = scanner.nextLine();
+            timetable.put(day, hours);
+        }
+
+        Physiotherapist physio = new Physiotherapist(physioName, physioAddress, physioPhone, expertiseAreas, timetable);
+        physioList.add(physio);
+        System.out.println("Physiotherapist added: " + physio);
+    }
+
+    private static void addTreatment(Scanner scanner, ArrayList<Treatment> treatmentList, ArrayList<Patient> patientList, ArrayList<Physiotherapist> physioList) {
+        System.out.print("Enter treatment name: ");
+        String treatmentName = scanner.nextLine();
+
+        System.out.print("Enter date and time (yyyy-MM-dd HH:mm): ");
+        String dateInput = scanner.nextLine();
+        LocalDateTime dateTime = LocalDateTime.parse(dateInput.replace(" ", "T"));
+
+        System.out.print("Enter physiotherapist name: ");
+        String physioSearch = scanner.nextLine();
+        Physiotherapist foundPhysio = null;
+
+        for (Physiotherapist p : physioList) {
+            if (p.getFullName().equalsIgnoreCase(physioSearch)) {
+                foundPhysio = p;
+                break;
+            }
+        }
+
+        if (foundPhysio == null) {
+            System.out.println("Physiotherapist not found.");
+        } else {
+            Treatment treatment = new Treatment(treatmentName, dateTime, foundPhysio);
+            treatmentList.add(treatment);
+            foundPhysio.treatmentSchedule.addTreatment(treatment);
+            System.out.println("Treatment added: " + treatment);
+        }
+    }
+
+    private static void cancelAppointment(Scanner scanner, ArrayList<Treatment> treatmentList) {
+        System.out.print("Enter treatment name to cancel: ");
+        String treatmentName = scanner.nextLine();
+
+        Treatment treatmentToCancel = null;
+        for (Treatment treatment : treatmentList) {
+            if (treatment.getTreatmentName().equalsIgnoreCase(treatmentName)) {
+                treatmentToCancel = treatment;
+                break;
+            }
+        }
+
+        if (treatmentToCancel != null) {
+            treatmentList.remove(treatmentToCancel);
+            System.out.println("Appointment for treatment " + treatmentName + " has been canceled.");
+        } else {
+            System.out.println("Treatment not found.");
+        }
+    }
+
     private static List<Patient> generateSamplePatients() {
         return Arrays.asList(
                 new Patient(1, "Jack Black", "67 Saxon Drive, W3 0DR", "07789967762"),
@@ -176,38 +237,35 @@ public class Main {
         physios.add(new Physiotherapist("Dr. Rachel Green", "121 Rosewood Lane, W6 4DD", "07866262010", Arrays.asList("Massage", "Acupuncture"), new HashMap<>(timetable)));
         physios.add(new Physiotherapist("Dr. Ava Parker", "22 Richwood Avenue, W3 4DR", "07976224010", Arrays.asList("Sports Injury", "Rehab"), new HashMap<>(timetable)));
         physios.add(new Physiotherapist("Dr. Emma Lewis", "77 Quentin Drive, N2 6GB", "07727210010", Arrays.asList("Joint Therapy", "Manual Therapy"), new HashMap<>(timetable)));
-        physios.add(new Physiotherapist("Dr. Noah Harris", "46  Horsehill St", "07455667788", Arrays.asList("Musculoskeletal", "Orthopedics"), new HashMap<>(timetable)));
+        physios.add(new Physiotherapist("Dr. Noah Harris", "46 Horsehill St", "07455667788", Arrays.asList("Musculoskeletal", "Orthopedics"), new HashMap<>(timetable)));
         physios.add(new Physiotherapist("Dr. Olivia Moore", "57 Kingswood Rd", "07567678899", Arrays.asList("Post-Surgical", "Cardio Rehab"), new HashMap<>(timetable)));
 
         return physios;
     }
 
     private static void generateSampleAppointments(ArrayList<Treatment> treatmentList, ArrayList<Patient> patients, ArrayList<Physiotherapist> physios) {
+        treatmentList.add(new Treatment("Acupuncture", LocalDateTime.of(2025, 4, 21, 10, 0), physios.get(0))); // Monday
+        treatmentList.add(new Treatment("Sports Injury", LocalDateTime.of(2025, 4, 23, 11, 0), physios.get(1))); // Wednesday
 
-            treatmentList.add(new Treatment("Acupuncture", LocalDateTime.of(2025, 4, 21, 10, 0), physios.get(0))); // Monday
-            treatmentList.add(new Treatment("Sports Injury", LocalDateTime.of(2025, 4, 23, 11, 0), physios.get(1))); // Wednesday
+        treatmentList.add(new Treatment("Joint Therapy", LocalDateTime.of(2025, 4, 28, 9, 30), physios.get(2))); // Monday
+        treatmentList.add(new Treatment("Orthopedics", LocalDateTime.of(2025, 4, 30, 14, 0), physios.get(3))); // Wednesday
 
-            treatmentList.add(new Treatment("Joint Therapy", LocalDateTime.of(2025, 4, 28, 9, 30), physios.get(2))); // Monday
-            treatmentList.add(new Treatment("Orthopedics", LocalDateTime.of(2025, 4, 30, 14, 0), physios.get(3))); // Wednesday
+        treatmentList.add(new Treatment("Post-Surgical", LocalDateTime.of(2025, 5, 5, 13, 0), physios.get(4))); // Monday
+        treatmentList.add(new Treatment("Cardio Rehab", LocalDateTime.of(2025, 5, 7, 15, 0), physios.get(4))); // Wednesday
 
-            treatmentList.add(new Treatment("Post-Surgical", LocalDateTime.of(2025, 5, 5, 13, 0), physios.get(4))); // Monday
-            treatmentList.add(new Treatment("Cardio Rehab", LocalDateTime.of(2025, 5, 7, 15, 0), physios.get(4))); // Wednesday
+        treatmentList.add(new Treatment("Manual Therapy", LocalDateTime.of(2025, 5, 12, 10, 30), physios.get(2))); // Monday
+        treatmentList.add(new Treatment("Massage", LocalDateTime.of(2025, 5, 14, 11, 15), physios.get(0))); // Wednesday
 
-            treatmentList.add(new Treatment("Manual Therapy", LocalDateTime.of(2025, 5, 12, 10, 30), physios.get(2))); // Monday
-            treatmentList.add(new Treatment("Massage", LocalDateTime.of(2025, 5, 14, 11, 15), physios.get(0))); // Wednesday
+        treatmentList.add(new Treatment("Acupuncture", LocalDateTime.of(2025, 4, 25, 10, 30), physios.get(0))); // Friday
+        treatmentList.add(new Treatment("Rehab", LocalDateTime.of(2025, 4, 25, 15, 30), physios.get(1))); // Friday
 
-            treatmentList.add(new Treatment("Acupuncture", LocalDateTime.of(2025, 4, 25, 10, 30), physios.get(0))); // Friday
-            treatmentList.add(new Treatment("Rehab", LocalDateTime.of(2025, 4, 25, 15, 30), physios.get(1))); // Friday
+        treatmentList.add(new Treatment("Joint Therapy", LocalDateTime.of(2025, 5, 2, 9, 0), physios.get(2))); // Friday
+        treatmentList.add(new Treatment("Orthopedics", LocalDateTime.of(2025, 5, 2, 14, 30), physios.get(3))); // Friday
 
-            treatmentList.add(new Treatment("Joint Therapy", LocalDateTime.of(2025, 5, 2, 9, 0), physios.get(2))); // Friday
-            treatmentList.add(new Treatment("Orthopedics", LocalDateTime.of(2025, 5, 2, 14, 30), physios.get(3))); // Friday
+        treatmentList.add(new Treatment("Post-Surgical", LocalDateTime.of(2025, 5, 9, 13, 15), physios.get(4))); // Friday
+        treatmentList.add(new Treatment("Massage", LocalDateTime.of(2025, 5, 9, 10, 15), physios.get(0))); // Friday
 
-            treatmentList.add(new Treatment("Post-Surgical", LocalDateTime.of(2025, 5, 9, 13, 15), physios.get(4))); // Friday
-            treatmentList.add(new Treatment("Massage", LocalDateTime.of(2025, 5, 9, 10, 15), physios.get(0))); // Friday
-
-            treatmentList.add(new Treatment("Sports Injury", LocalDateTime.of(2025, 5, 16, 11, 45), physios.get(1))); // Friday
-            treatmentList.add(new Treatment("Manual Therapy", LocalDateTime.of(2025, 5, 16, 9, 15), physios.get(2))); // Friday
-        }
+        treatmentList.add(new Treatment("Sports Injury", LocalDateTime.of(2025, 5, 16, 11, 45), physios.get(1))); // Friday
+        treatmentList.add(new Treatment("Manual Therapy", LocalDateTime.of(2025, 5, 16, 9, 15), physios.get(2))); // Friday
     }
-
-
+}
