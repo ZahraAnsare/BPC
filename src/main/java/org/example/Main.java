@@ -64,21 +64,90 @@ public class Main {
     private static void bookAppointment(Scanner scanner, ArrayList<Patient> patientList, ArrayList<Physiotherapist> physioList, ArrayList<Treatment> treatmentList) {
         System.out.print("Enter the ID of the patient: ");
         int id = scanner.nextInt();
+        scanner.nextLine();  // Consume newline
+
+        Patient patient = null;
+        for (Patient p : patientList) {
+            if (p.getId() == id) {
+                patient = p;
+                break;
+            }
+        }
+
+        if (patient == null) {
+            System.out.println("Patient not found. Please enter new patient details.");
+
+            System.out.print("Enter the name of the patient: ");
+            String name = scanner.nextLine();
+
+            System.out.print("Enter the address of the patient: ");
+            String address = scanner.nextLine();
+
+            System.out.print("Enter the phone number of the patient: ");
+            String phone = scanner.nextLine();
+
+            patient = new Patient(id, name, address, phone);
+            patientList.add(patient);
+            System.out.println("Patient added: " + patient);
+        }
+
+        System.out.println("\n--- Available Physiotherapists ---");
+        for (int i = 0; i < physioList.size(); i++) {
+            Physiotherapist physio = physioList.get(i);
+            System.out.println((i + 1) + ". " + physio.getFullName() + " - " + physio.getExpertiseAreas());
+        }
+
+        System.out.print("Select a physiotherapist by number: ");
+        int physioChoice = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.print("Enter the name of the patient: ");
-        String name = scanner.nextLine();
+        if (physioChoice < 1 || physioChoice > physioList.size()) {
+            System.out.println("Invalid selection. Returning to main menu.");
+            return;
+        }
 
-        System.out.print("Enter the address of the patient: ");
-        String address = scanner.nextLine();
+        Physiotherapist selectedPhysio = physioList.get(physioChoice - 1);
+        System.out.println("You selected: " + selectedPhysio.getFullName());
 
-        System.out.print("Enter the phone number of the patient: ");
-        String phone = scanner.nextLine();
+        List<Treatment> availableTreatments = new ArrayList<>();
+        for (Treatment treatment : treatmentList) {
+            if (treatment.getPhysiotherapist().equals(selectedPhysio)) {
+                availableTreatments.add(treatment);
+            }
+        }
 
-        Patient patient = new Patient(id, name, address, phone);
-        patientList.add(patient);
-        System.out.println("Patient added: " + patient);
+        if (availableTreatments.isEmpty()) {
+            System.out.println("No treatments available for this physiotherapist.");
+            return;
+        }
+
+        System.out.println("\n--- Available Treatments for " + selectedPhysio.getFullName() + " ---");
+        for (int i = 0; i < availableTreatments.size(); i++) {
+            System.out.println((i + 1) + ". " + availableTreatments.get(i).getTreatmentName() + " at " + availableTreatments.get(i).getDateTime());
+        }
+
+        System.out.print("Select a treatment by number: ");
+        int treatmentChoice = scanner.nextInt();
+        scanner.nextLine();
+
+        if (treatmentChoice < 1 || treatmentChoice > availableTreatments.size()) {
+            System.out.println("Invalid selection. Returning to main menu.");
+            return;
+        }
+
+        Treatment selectedTreatment = availableTreatments.get(treatmentChoice - 1);
+        System.out.println("You selected: " + selectedTreatment.getTreatmentName() + " on " + selectedTreatment.getDateTime());
+
+        System.out.println("Booking appointment for patient: " + patient.getName());
+        System.out.println("Treatment: " + selectedTreatment.getTreatmentName());
+        System.out.println("Physiotherapist: " + selectedPhysio.getFullName());
+        System.out.println("Date and Time: " + selectedTreatment.getDateTime());
+
+        Appointment appointment = new Appointment(patient, selectedTreatment);
+
+        System.out.println("Appointment booked successfully!");
     }
+
 
 
     private static void listPhysiotherapists(ArrayList<Physiotherapist> physioList) {
