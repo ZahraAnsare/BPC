@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,6 @@ public class Physiotherapist {
         this.treatmentSchedule = new TreatmentSchedule();
     }
 
-    // --- Getters ---
     public int getId() {
         return id;
     }
@@ -68,5 +68,9 @@ public class Physiotherapist {
 
     public static void resetIdCounter() {
         idCounter = 1;
+    }
+
+    public Collection<String> getExpertise() {
+        return expertiseAreas;
     }
 }

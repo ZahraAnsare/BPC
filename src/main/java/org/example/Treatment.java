@@ -14,6 +14,9 @@ public class Treatment {
         this.physiotherapist = physiotherapist;
     }
 
+    public Treatment(String treatmentName, String treatmentType, LocalDateTime dateTime, Physiotherapist physio) {
+    }
+
     // Getter methods
     public String getTreatmentName() {
         return treatmentName;
@@ -34,5 +37,9 @@ public class Treatment {
                 ", dateTime=" + dateTime +
                 ", physiotherapist=" + physiotherapist.getFullName() +
                 '}';
+    }
+
+    public String getTreatmentType() {
+        return "";
     }
 }
